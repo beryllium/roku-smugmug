@@ -61,8 +61,8 @@ Sub SlideshowSpeed()
 End Sub
 
 Sub DelinkPlayer()
-    ans=ShowDialog2Buttons("Deactivate Player","Remove link to you SmugMug account?","Confirm","Cancel")
-    if ans=0 then 
+    ans=ShowDialog2Buttons("Deactivate Player","Remove link to your SmugMug account?","Confirm","Cancel")
+    if ans=0 then
         RegDelete("oauth_token","Authentication")
         RegDelete("oauth_secret","Authentication")
         m.isLinked=false
@@ -112,8 +112,8 @@ Function GetFollowList()
     for each follow in following
         followReg=strTokenize(RegRead(follow,"Follow"),"|")
         'For backwards compatibility, derive URL
-        if followReg[1]=invalid then followReg[1]="http://"+follow+".smugmug.com"
-        
+        if followReg[1]=invalid then followReg[1]="https://"+follow+".smugmug.com"
+
         ff={nickname: follow, DisplayName: followReg[0], URL: followReg[1]}
         followlist.Push(ff)
     end for

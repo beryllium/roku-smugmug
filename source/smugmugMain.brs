@@ -30,7 +30,7 @@ Sub RunUserInterface()
         for each h in smugmug.highlights:highlights.Push(h):next
         
         if smugmug.isLinked then
-            new_highlights=smugmug.getRandomRssHighlights("http://www.smugmug.com/hack/feed.mg?Type=nicknameRecentPhotos&Data="+smugmug.nickname+"&format=atom10", 1, false)
+            new_highlights=smugmug.getRandomRssHighlights("https://www.smugmug.com/hack/feed.mg?Type=nicknameRecentPhotos&Data="+smugmug.nickname+"&format=atom10", 1, false)
             if new_highlights.Count()>0 then highlights[2]=new_highlights[0]
         end if
         

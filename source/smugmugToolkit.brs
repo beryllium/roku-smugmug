@@ -87,7 +87,7 @@ Function CreateSmugMugConnection() As Object
         sha1: function(str,key):sigkey=CreateObject("roByteArray"):sigkey.fromAsciiString(key):ba=CreateObject("roByteArray"):m.hmac.Setup("sha1",sigkey):ba.FromAsciiString(str):return m.hmac.process(ba).toBase64String():end function,
         
         'Oauth
-        endpoint: "http://api.smugmug.com/services/api/rest/1.2.2/",
+        endpoint: "https://api.smugmug.com/services/api/rest/1.3.0/",
         api_key: getApiKey(),
         api_secret: getApiSecret(),
         oauth_signature_method: "HMAC-SHA1",
@@ -98,10 +98,10 @@ Function CreateSmugMugConnection() As Object
         'Url
         urlencodeRFC3986: urlencodeRFC3986,
         urlencodeParams: urlencodeParams,
-        PopularUrlBase: "http://www.smugmug.com/hack/feed.mg?Type=popular&format=atom10&Data=",
-        RandomUrlBase: "http://www.smugmug.com/photos/random.mg?",
-        RecentUrlBase: "http://www.smugmug.com/hack/feed.mg?Type=nicknameRecentPhotos&format=atom10&Data=",
-        
+        PopularUrlBase: "https://www.smugmug.com/hack/feed.mg?Type=popular&format=atom10&Data=",
+        RandomUrlBase: "https://www.smugmug.com/photos/random.mg?",
+        RecentUrlBase: "https://www.smugmug.com/hack/feed.mg?Type=nicknameRecentPhotos&format=atom10&Data=",
+
         'Registration
         doRegistration: doRegistration,
         getRegistrationCode: getRegistrationCode,
@@ -318,7 +318,7 @@ Sub BrowseMySmugMug()
 
     screen=uitkPreShowPosterMenu("","My SmugMug")
 
-    highlights=m.getRandomRssHighlights("http://www.smugmug.com/hack/feed.mg?Type=nicknameRecentPhotos&Data="+m.nickname+"&format=atom10",4)
+    highlights=m.getRandomRssHighlights("https://www.smugmug.com/hack/feed.mg?Type=nicknameRecentPhotos&Data="+m.nickname+"&format=atom10",4)
     for i=0 to 3
         if highlights[i]=invalid then
             highlights[i]="pkg:/images/smuggy.png"
@@ -558,7 +558,7 @@ Function iIsVideo() As Boolean
 End Function
 
 Function getImageURL(image_id, image_key, size="L" As String, ext="jpg" As String) As String
-    url="http://www.smugmug.com/photos/"+image_id+"_"+image_key+"-"+size+"."+ext
+    url="https://www.smugmug.com/photos/"+image_id+"_"+image_key+"-"+size+"."+ext
     return url
 End Function
 
@@ -847,8 +847,8 @@ Sub BrowseSmugmugCategories()
     categories=GetStaticCategories()
     while categories.IsNext()
         category=categories.Next()
-        
-        rsp=m.ExecRSSRequest("http://www.smugmug.com/hack/feed.mg?Type=popularCategory&Data="+m.http.UrlEncode(category)+"&format=atom10")
+
+        rsp=m.ExecRSSRequest("https://www.smugmug.com/hack/feed.mg?Type=popularCategory&Data="+m.http.UrlEncode(category)+"&format=atom10")
         if rsp=invalid then
             ShowErrorDialog("Bad feed response. Try again.","Bad Feed")
             return
@@ -915,7 +915,7 @@ Sub PhotoSearch(searchtype="keyword")
             else if msg.isFullResult()
                 keyword=msg.GetMessage()
                 dialog=ShowPleaseWait("Please wait","Searching images for "+keyword)
-                rsp=m.ExecRSSRequest("http://smugmug.com/hack/feed.mg?Type="+searchtype+"&Data="+m.http.UrlEncode(keyword)+"&format=atom10")
+                rsp=m.ExecRSSRequest("https://smugmug.com/hack/feed.mg?Type="+searchtype+"&Data="+m.http.UrlEncode(keyword)+"&format=atom10")
                 if rsp=invalid then
                     ShowErrorDialog("Bad feed response. Try again.","Bad Feed")
                     return
@@ -1047,7 +1047,7 @@ Sub BrowseFriendsFamily()
         onselect = [1, ff_data[0], m, function(ff, smugmug, set_idx):smugmug.DisplayFriendsFamily(ff[set_idx]):end function]
         uitkDoPosterMenu(m.getFFMetaData(ff_data[0]), screen, onselect)
     else
-        uitkDoMessage("You are not linked to any friends or family.  To find out more about linking to friend and family go to http://www.smugmug.com/help/friends-and-family.", screen)
+        uitkDoMessage("You are not linked to any friends or family.  To find out more about linking to friend and family go to https://www.smugmug.com/help/friends-and-family.", screen)
     end if
 End Sub
 
