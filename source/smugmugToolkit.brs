@@ -113,7 +113,9 @@ Function CreateSmugMugConnection() As Object
         regUrlGetRegResult: "/getRegResult",
         regUrlWebSite: getLinkWebsite(),
     }
-    
+
+    smugmug.http.SetCertificatesFile("common:/certs/ca-bundle.crt")
+
     rsp=smugmug.ExecServerAPI("smugmug.service.ping")
     if not isxmlelement(rsp) then
         return invalid
