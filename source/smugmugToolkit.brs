@@ -454,7 +454,7 @@ End Function
 
 Function aGetHighlightURL() As String
     if m.xml.highlight@id<>invalid then
-        return m.smugmug.getImageURL(m.xml.highlight@id, m.xml.highlight@key, "S")
+        return m.smugmug.getImageURL(m.xml.highlight@key, "S")
     else if m.HasPassword()=1 then
         return "pkg:/images/smuggy.png"
     else
@@ -569,8 +569,10 @@ Function iIsVideo() As Boolean
     return 0
 End Function
 
-Function getImageURL(image_id, image_key, size="L" As String, ext="jpg" As String) As String
-    url="https://www.smugmug.com/photos/"+image_id+"_"+image_key+"-"+size+"."+ext
+Function getImageURL(image_key, size="L" As String, ext="jpg" As String) As String
+    url="https://photos.smugmug.com/photos/i-"+image_key+"/0/"+size+"/i-"+image_key+"-"+size+"."+ext
+    'print "getImageURL: " url
+    'print "  image_key: " image_key
     return url
 End Function
 
@@ -622,24 +624,24 @@ Function newImageFromRSS(xml As Object) As Object
     image = CreateObject("roAssociativeArray")
     image.xml=xml
     image.GetCaption=function():return m.xml.title.GetText():end function
-    image.GetID=function():return getImageIdFromURL(m.xml.link@href, "id"):end function
-    image.GetKey=function():return getImageIdFromURL(m.xml.link@href, "key"):end function
-    image.GetURL=function(size):return getImageURL(m.GetID(), m.GetKey(), size):end function
+    image.GetKey=function():return getImageKeyFromUrl(m.xml.link@href):end function
+    image.GetURL=function(size):return getImageURL(m.GetKey(), size):end function
     return image
 End Function
 
-'Parse id and key from image URL
-Function getImageIdFromURL(url As String, typ As String) As String
-    'Getting image string (<id>_<key>)
-    image_str=Right(url, Len(url)-InStr(1, url, "#!i=")-3)
+'Extract the image key from a full URL ending in "/i-{KEY}/"
+Function getImageKeyFromUrl(url As String) As String
+    'locate the key prefix "/i-"
+    start_pos=InStr(1, url, "/i-")+2
 
-    'Get id
-    delim_pos=InStr(1, image_str, "&k=")+2
-    if typ="id" then
-        return Left(image_str, delim_pos-1)
-    else if typ="key"
-        return Right(image_str,Len(image_str)-delim_pos)
-    end if
+    'extract from the key position to the end of the string
+    end_str=Right(url, Len(url)-start_pos)
+
+    'locate the first "/" in the remaining string
+    end_pos=InStr(1, end_str, "/")
+
+    'return up to the first "/"
+    return Left(end_str, end_pos-1)
 End Function
 
 Function getImageMetaData(images As Object)
