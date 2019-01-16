@@ -195,6 +195,10 @@ Function ExecServerAPI(method, param_list=[] As Object, nickname=invalid As Dyna
     else if m.session_id=invalid then
         m.http.SetUrl(m.endpoint+"?method=smugmug.login.anonymously&APIKey="+m.api_key)
         xml=m.http.GetToString()
+
+        'print "GOT: " + xml
+        'print "Reason: " + m.http.GetFailureReason()
+
         rsp=ParseXML(xml)
         if rsp=invalid then 
             ShowErrorDialog("Error retrieving results","Unable to obtain session")
@@ -218,7 +222,10 @@ Function ExecServerAPI(method, param_list=[] As Object, nickname=invalid As Dyna
     print apiurlstr
     m.http.SetUrl(apiurlstr)
     xml=m.http.GetToString()
-    'print xml
+
+    'print "GOT: " + xml
+    'print "Reason: " + m.http.GetFailureReason()
+
     rsp=ParseXML(xml)
     if rsp=invalid then
         ShowErrorDialog("API return invalid. Try again later","Bad response")
@@ -294,7 +301,10 @@ End Function
 Function ExecRSSRequest(url As String) As Dynamic
     m.http.SetUrl(url)
     xml=m.http.GetToString()
-    'print xml
+
+    'print "GOT: " + xml
+    'print "Reason: " + m.http.GetFailureReason()
+
     rss=ParseXML(xml)
     if rss=invalid then return invalid
     

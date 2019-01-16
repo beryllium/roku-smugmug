@@ -201,7 +201,10 @@ Function checkRegistrationStatus(sn As String, regCode As String) As Integer
     
     while true
         rsp = m.http.GetToString()
-        print rsp
+
+        'print "GOT: " + rsp
+        'print "Reason: " + m.http.GetFailureReason()
+
         xml=ParseXML(rsp)
         if xml=invalid then
             print "Can't parse check registration status response"
