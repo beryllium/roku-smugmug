@@ -31,8 +31,8 @@ Function doRegistration() As Integer
         rsp=m.ExecServerAPI("smugmug.auth.getRequestToken")
         m.oauth_token=rsp.auth.token@id
         m.oauth_token_secret=rsp.auth.token@secret
-        
-        sn = CreateObject("roDeviceInfo").GetDeviceUniqueId() 
+
+        sn = CreateObject("roDeviceInfo").GetChannelClientId()
         regCode = m.getRegistrationCode(sn)
         
         'if we've failed to get the registration code, bail out, otherwise we'll
