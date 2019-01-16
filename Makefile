@@ -1,5 +1,5 @@
 #########################################################################
-# Simple makefile for packaging Roku Flickr application
+# Simple makefile for packaging Roku SmugMug application
 #
 # Makefile Usage:
 # > make
@@ -14,7 +14,9 @@
 # 2) Set the variable ROKU_DEV_TARGET in your environment to the IP 
 #    address of your Roku box. (e.g. export ROKU_DEV_TARGET=192.168.1.1.
 #    Set in your this variable in your shell startup (e.g. .bashrc)
-##########################################################################  
+# 3) If your roku has a password, set the ROKU_DEV_PW environment variable
+#    in order to allow curl requests to authenticate properly for "make install"
+##########################################################################
 PKGREL = ../../packages
 ZIPREL = ../../zips
 SOURCEREL = ..
@@ -56,7 +58,7 @@ roku-smugmug:
 
 install: roku-smugmug
 	@echo "Installing $(APPNAME) to host $(ROKU_DEV_TARGET)"
-	@curl -s -S -F "mysubmit=Install" -F "archive=@$(ZIPREL)/$(APPNAME).zip" -F "passwd=" http://$(ROKU_DEV_TARGET)/plugin_install | grep "<font color" | sed "s/<font color=\"red\">//"
+	@curl -s -S -F "mysubmit=Install" -F "archive=@$(ZIPREL)/$(APPNAME).zip" --anyauth "http://rokudev:$(ROKU_DEV_PW)@$(ROKU_DEV_TARGET)/plugin_install" | grep "<font color" | sed "s/<font color=\"red\">//"
 
 pkg: install
 	@echo "*** Creating Package ***"
